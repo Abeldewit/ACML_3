@@ -30,8 +30,9 @@ The second value of the observation is the speed of the car. This value ranges f
 
 \subsubsection{Step function}
 The environment has a function called step. This function takes as a parameter the action that is to be taken, and outputs four values. The observation (state) after taking the action, the reward of this action, whether the objective is reached '\texttt{done}', and some information which is irrelevant for our scenario. 
+
 \subsubsection{Discretising state space}
-TODO 
+As Q-learning requires a discrete state space, both variables, speed and position were partitioned into equal-width bins. The speed of the car was rounded to 2 decimal digits, its position to 1 decimal digits. Thus the state space consits of $15 \cdot 19 = 285$ states.
 
 \subsection{Q-learning}
 Using the environment described above, we were able to implement a very basic Q-learning algorithm that is able to teach itself what types of actions should be taken in which states. 
