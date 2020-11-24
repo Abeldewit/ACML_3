@@ -31,7 +31,7 @@ def discretize(state):
 
 def q_init():
     # Create a uniform distribution between -1 and 1 for the Q table
-    Q_in = np.random.uniform(low=-1, high=1, size=(15,  19, env.action_space.n))
+    Q_in = np.random.uniform(low=-1, high=0, size=(15,  19, env.action_space.n))
     Q = {}
     for i, p in enumerate(pos_list):
         for j, s in enumerate(speed_list):
@@ -90,18 +90,18 @@ def qlearning(env, learning, discount, epsilon, min_eps, episodes):
 
         # Decay epsilon
         if epsilon > min_eps:
-            epsilon -= reduction
+            epsilon = np.maximum(epsilon - reduction, min_eps)
 
         # Track rewards
         reward_list.append(total_reward)
 
+        ave_reward = np.mean(reward_list)
+        ave_reward_list.append(ave_reward)
         # Some printing and image generation
         if (i_episode + 1) % 100 == 0:
-            ave_reward = np.mean(reward_list)
-            ave_reward_list.append(ave_reward)
             reward_list = []
             print('Episode {} Average Reward: {}'.format(i_episode + 1, ave_reward))
-            heat_display(Q, episode=i_episode+1, save=True)
+            #heat_display(Q, episode=i_episode+1, save=True)
 
     return ave_reward_list, Q
 
@@ -130,6 +130,7 @@ def heat_display(Q, episode, qora=0, save=False):
             plt.show()
         else:
             plt.savefig('images/{}/r_img_{}'.format(fmax, episode))
+            plt.show()
             plt.close()
 
     if qora == 1 or qora == 2:
@@ -144,6 +145,7 @@ def heat_display(Q, episode, qora=0, save=False):
             plt.show()
         else:
             plt.savefig('images/{}/a_img_{}'.format(fmax, episode))
+            plt.show()
             plt.close()
 
 
@@ -153,20 +155,21 @@ if __name__ == '__main__':
     num_episodes = 5000
     rewards, Q = qlearning(env=env,
                            learning=0.2,
-                           discount=0.9,
-                           epsilon=0.8,
+                           discount=0.9999,
+                           epsilon=0.01,
                            min_eps=0,
                            episodes=num_episodes)
 
     # Plot Value function and action mapping
-    heat_display(Q, num_episodes, 2)
+    heat_display(Q, num_episodes, 2, save=True)
 
     # Plot Rewards
-    plt.plot(100 * (np.arange(len(rewards)) + 1), rewards)
+    plt.plot((np.arange(len(rewards)) + 1), rewards)
     plt.xlabel('Episodes')
     plt.ylabel('Average Reward')
     plt.title('Average Reward vs Episodes')
-    plt.savefig('rewards.jpg')
+    plt.savefig('images/{}/rewards.png'.format(fmax))
+    plt.show()
     plt.close()
 
 

@@ -1,5 +1,7 @@
 \documentclass{article}
 
+\usepackage{graphicx,float}
+
 % Title content
 \title{\Large KEN 4154 Assignment 3 \\ \normalsize Reinforcement Learning}
 \author{Adrian Sondermann, Abel de Wit}
@@ -39,7 +41,7 @@ The Q-learning algorithm uses epsilon greedy \textbf{TODO reference} to determin
 
 After it has chosen an action either randomly or based on the highest value in the Q function for the current state, the step function which is described above is called with the chosen action. The result of taking this action is recorded in the four variables that are returned. The new state is discretised and the Bellmann update is performed on the Q-function. 
 \begin{displaymath}
-  Q(s, a) = Q(s,a) + \alpha[R(s,a) + \gamma max Q(s', a') - Q(s, a)
+  Q(s, a) = Q(s,a) + \alpha[R(s,a) + \gamma max Q(s', a') - Q(s, a)]
 \end{displaymath}
 
 The reward that is achieved by doing action 'a' in state 's' is given by the step function. The new state that we're in '$s'$' is also given by the step function. And with these values we can lookup the Q-values $Q(s, a)$ and $max Q(s', a')$. 
@@ -48,5 +50,42 @@ With enough episodes of randomly moving around in the environment, the algorithm
 
 \section{Results}
 
+\subsection{Visualisation}
+To visualize the state-value function $Q$ the maximum per discretisised two-dimensional state (velocity, position) is calculated. Then the retreived 2d-matrix is displayed using the \textit{viridis} colormap.
+
+\subsection{Tuning}
+A good visualization of the function must contain information about how the car will behave in different situations, respectively the distance to drive until the destination will be reached. Therefore the parameters in Table \ref{tab:tuned_params} were determined. The big discount rate is useful to gain insight of how far the car has to travel, beginning from its current position and velocity. A small epsilon guarantees few random moves, as these are only initially needed. This is because, the algorithm needs to learn driving away from the destination when climbing the hill slowly. Afterwards, random moves won't be needed. 5000 episodes are enough for the algorithm to converge, as shown by the convergence in Figure \ref{fig:average_rewards}.
+
+
+\begin{table}
+    \centering
+    \begin{tabular}{l|c}
+        parameter & value \\
+        \hline
+        learning rate & 0.2 \\
+        discount & 0.9999 \\
+        epsilon & 0.01 \\
+        minimal epsilon & 0 \\
+        episodes & 5000 \\
+    \end{tabular}
+    \caption{Tuned parameters}
+    \label{tab:tuned_params}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{rewards.png}
+    \caption{Visualization of the average rewards per episode}
+    \label{fig:average_rewards}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{state-value-function.png}
+    \caption{Visualization of the state-value function}
+    \label{fig:state-value-function}
+\end{figure}
+
+The state-value function in Figure \ref{fig:state-value-function} beautifully visualises the time left the car has to drive before reaching the destination. It starts in the dark middle of the plot without any speed. Initially it needs to gather speed by driving back and forth, until it is fast enough to climb the hill completely. This results in a snake-like shape of the final function. Hence, if the car is fast enough (upper and lower end of the plot) it takes very few timesteps to reach the goal.
 
 \end{document}
