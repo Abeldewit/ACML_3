@@ -67,7 +67,7 @@ To visualize the state-value function $Q$ the maximum per discretisised two-dime
 A good visualization of the function must contain information about how the car will behave in different situations, respectively the distance to drive until the destination will be reached. Therefore the parameters in Table \ref{tab:tuned_params} were determined. The big discount rate is useful to gain insight of how far the car has to travel, beginning from its current position and velocity. A small epsilon guarantees few random moves, as these are only initially needed. This is because, the algorithm needs to learn driving away from the destination when climbing the hill slowly. Afterwards, random moves won't be needed. 5000 episodes are enough for the algorithm to converge, as shown by the convergence in Figure \ref{fig:average_rewards}.
 
 
-\begin{table}
+\begin{table}[!h]
     \centering
     \begin{tabular}{l|c}
         parameter & value \\
