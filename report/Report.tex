@@ -1,6 +1,7 @@
 \documentclass{article}
 
 \usepackage{graphicx,float}
+\usepackage{hyperref}
 
 % Title content
 \title{\Large KEN 4154 Assignment 3 \\ \normalsize Reinforcement Learning}
@@ -38,7 +39,15 @@ As Q-learning requires a discrete state space, both variables, speed and positio
 Using the environment described above, we were able to implement a very basic Q-learning algorithm that is able to teach itself what types of actions should be taken in which states. 
 It teaches itself this trough repeated trial and error, these trials are called \texttt{episodes}. For each episode the environment is reset and a certain set of actions are taken by the algorithm. 
 
-The Q-learning algorithm uses epsilon greedy \textbf{TODO reference} to determine whether it will choose an action randomly or based on the learned Q-function. The epsilon is lowered while learning to slowly force the algorithm to use the Q-function more than random moves, but these random moves are what makes the algorithm go to unexpected states which increases the learning of the environment. 
+The Q-learning algorithm uses epsilon greedy\footnote{\url{https://www.geeksforgeeks.org/epsilon-greedy-algorithm-in-reinforcement-learning/} } (see Figure \ref{fig:epsilon}) to determine whether it will choose an action randomly or based on the learned Q-function. The epsilon is lowered while learning to slowly force the algorithm to use the Q-function more than random moves, but these random moves are what makes the algorithm go to unexpected states which increases the learning of the environment. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Epsilon_greedy.png}
+    \caption{Visualization of the average rewards per episode}
+    \label{fig:epsilon}
+\end{figure}
+
 
 After it has chosen an action either randomly or based on the highest value in the Q function for the current state, the step function which is described above is called with the chosen action. The result of taking this action is recorded in the four variables that are returned. The new state is discretised and the Bellmann update is performed on the Q-function. 
 \begin{displaymath}
