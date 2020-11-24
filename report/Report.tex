@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 % Title content
 \title{\Large KEN 4154 Assignment 3 \\ \normalsize Reinforcement Learning}
@@ -10,8 +10,42 @@
 \maketitle
 
 \section{Introduction}
+In this assignment we were tasked to implement a type of reinforcement learning with the OpenAI testbed 'Mountain Car'. In this environment, the car is tasked to drive on a sinus function and its goal is to reach the top of the hill. For most people this task seems trivial; Go back and forth between the two hills to build up some momentum and then use that to reach the top of the hill. This however, is less intuitive for algorithms as driving up the left hill would mean removing the car further from the goal. Because of this, regular pathfinding algorithms will have difficulty with distancing themselves from the goal first, to then be able to reach the goal. 
+
+To solve this, the problem is reformulated to be used by reinforcement learning. Using reinforcement learning, the algorithm can learn what the reward will be in a situation if taken a certain action, these are called state-action pairs. 
 
 \section{Implementation}
+\subsection{Environment}
+Using the \texttt{gym} package provided by OpenAI the environment is set up rather easy. 
+The environment provides us with several things:
+\subsubsection{Observation}
+The observation describes the current state of the environment. 
+In the case of our 'Mountain Car' example we are provided with two values. 
+
+The first is the horizontal position of the car in the environment. This value ranges from $-1.2$ to $0.6$. The car starts in a random position between -0.6 and -0.4, which is the valley in our environment. 
+
+The second value of the observation is the speed of the car. This value ranges from -0.07 to 0.07, where a negative value indicates moving to the left and a positive value indicates moving to the right.
+
+\subsubsection{Step function}
+The environment has a function called step. This function takes as a parameter the action that is to be taken, and outputs four values. The observation (state) after taking the action, the reward of this action, whether the objective is reached '\texttt{done}', and some information which is irrelevant for our scenario. 
+\subsubsection{Discretising state space}
+TODO 
+
+\subsection{Q-learning}
+Using the environment described above, we were able to implement a very basic Q-learning algorithm that is able to teach itself what types of actions should be taken in which states. 
+It teaches itself this trough repeated trial and error, these trials are called \texttt{episodes}. For each episode the environment is reset and a certain set of actions are taken by the algorithm. 
+
+The Q-learning algorithm uses epsilon greedy \textbf{TODO reference} to determine whether it will choose an action randomly or based on the learned Q-function. The epsilon is lowered while learning to slowly force the algorithm to use the Q-function more than random moves, but these random moves are what makes the algorithm go to unexpected states which increases the learning of the environment. 
+
+After it has chosen an action either randomly or based on the highest value in the Q function for the current state, the step function which is described above is called with the chosen action. The result of taking this action is recorded in the four variables that are returned. The new state is discretised and the Bellmann update is performed on the Q-function. 
+\begin{displaymath}
+  Q(s, a) = Q(s,a) + \alpha[R(s,a) + \gamma max Q(s', a') - Q(s, a)
+\end{displaymath}
+
+The reward that is achieved by doing action 'a' in state 's' is given by the step function. The new state that we're in '$s'$' is also given by the step function. And with these values we can lookup the Q-values $Q(s, a)$ and $max Q(s', a')$. 
+With enough episodes of randomly moving around in the environment, the algorithm starts to reach the goal more and more often, because of this the algorithm will learn a policy of which action is the best to take in a certain state. In the case of our 'Mountain Car' environment, that means that the algorithm learns whether to move left or right given his position on the hills and his current speed.
+
+
 \section{Results}
 
 
