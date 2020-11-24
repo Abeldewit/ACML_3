@@ -125,3 +125,6 @@ dmypy.json
 .pyre/
 .DS_Store
 .idea
+images/
+report/Report.aux
+report/Report.synctex.gz

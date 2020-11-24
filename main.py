@@ -101,7 +101,7 @@ def qlearning(env, learning, discount, epsilon, min_eps, episodes):
         if (i_episode + 1) % 100 == 0:
             reward_list = []
             print('Episode {} Average Reward: {}'.format(i_episode + 1, ave_reward))
-            #heat_display(Q, episode=i_episode+1, save=True)
+            heat_display(Q, episode=i_episode+1, save=False)
 
     return ave_reward_list, Q
 
@@ -125,12 +125,12 @@ def heat_display(Q, episode, qora=0, save=False):
         plt.yticks(ticks=list(range(len(speed_list))), labels=speed_list)
         plt.xlabel("Position")
         plt.ylabel("Velocity")
+        plt.xticks(rotation=45)
         plt.title("Value function after {e} episodes".format(e=episode))
         if not save:
             plt.show()
         else:
             plt.savefig('images/{}/r_img_{}'.format(fmax, episode))
-            plt.show()
             plt.close()
 
     if qora == 1 or qora == 2:
@@ -140,12 +140,12 @@ def heat_display(Q, episode, qora=0, save=False):
         plt.yticks(ticks=list(range(len(speed_list))), labels=speed_list)
         plt.xlabel("Position")
         plt.ylabel("Velocity")
+        plt.xticks(rotation=45)
         plt.title("Action function after {e} episodes".format(e=episode))
         if not save:
             plt.show()
         else:
             plt.savefig('images/{}/a_img_{}'.format(fmax, episode))
-            plt.show()
             plt.close()
 
 
